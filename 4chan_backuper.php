@@ -89,6 +89,8 @@ while (true) {
         file_put_contents($save_path . "images" . DIRECTORY_SEPARATOR . $full_bname, $full_binary);
         $a->setAttribute("href", "images/" . $full_bname);
         $img->setAttribute("src", "images/thumbnails/" . $thumb_bname);
+        // saving here ease debugging, and as long as it's not performance-critical..
+        file_put_contents($save_path . "index.html", $old_domd->saveHTML(), LOCK_EX);
     }
     if ($new_posts > 0 || $new_images > 0) {
         file_put_contents($save_path . "index.html", $old_domd->saveHTML(), LOCK_EX);
