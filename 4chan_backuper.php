@@ -88,6 +88,7 @@ while (true) {
         file_put_contents($save_path . "images" . DIRECTORY_SEPARATOR . "thumbnails" . DIRECTORY_SEPARATOR . $thumb_bname, $thumb_binary);
         file_put_contents($save_path . "images" . DIRECTORY_SEPARATOR . $full_bname, $full_binary);
         $a->setAttribute("href", "images/" . $full_bname);
+        //$img->setAttribute("src","images/" . $full_bname);
         $img->setAttribute("src", "images/thumbnails/" . $thumb_bname);
         // saving here ease debugging, and as long as it's not performance-critical..
         file_put_contents($save_path . "index.html", $old_domd->saveHTML(), LOCK_EX);
@@ -174,12 +175,13 @@ function get_url(): string
         throw new \RuntimeException("url not specified! (and not running interactively)");
     }
     $url = trim($url);
-    if (!preg_match('/^(?:https?\:\/\/)?boards\.4chan\.org\/(?<board_name>.*?)\/.*?\/(?<thread_id>\d+)/', $url, $matches)) {
+    if (!preg_match('/^(?:https?\:\/\/)?boards\.(?<page>(?:4chan)|(?:4channel))\.org\/(?<board_name>.*?)\/.*?\/(?<thread_id>\d+)/', $url, $matches)) {
         throw new \RuntimeException("url \"{$url}\" does not look like a 4chan board url! - they are supposed to look something like http://boards.4chan.org/hc/thread/1501699#p1508333");
     }
     $board_name = $matches['board_name'];
     $thread_id = $matches['thread_id'];
-    $url = "http://boards.4chan.org/{$board_name}/thread/{$thread_id}";
+    $page=$matches['page'];
+    $url = "http://boards.{$page}.org/{$board_name}/thread/{$thread_id}";
     echo "url parsed: \"{$url}\"\n";
     $save_path = getcwd() . DIRECTORY_SEPARATOR . "backups";
     mymkdir($save_path);
